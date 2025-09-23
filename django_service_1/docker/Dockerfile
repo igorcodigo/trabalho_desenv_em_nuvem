@@ -1,7 +1,7 @@
 #Dockerfile
 # Usar a imagem oficial do Python
 # FROM python:3.10
-FROM python:3.10-slim
+FROM python:3.13-slim
 
 # Prevent Python from buffering stdout and stderr
 ENV PYTHONUNBUFFERED 1
