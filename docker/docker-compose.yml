@@ -1,0 +1,107 @@
+#docker-compose.yml
+services:
+
+  service_django_dev:
+    build:
+      context: ../django_service_1
+      dockerfile: docker/Dockerfile
+    container_name: service_django_dev
+    profiles: ["development"]
+    volumes:
+      - teste_django_db_data:/app/db
+      - static_volume:/app/static
+      - ../django_service_1:/core  # Mount source code for hot reload
+    command: sh -c "pip freeze > /core/requirements/all_requirements.freeze.txt && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    env_file:
+      - ../.env
+    ports:
+      - "8011:8000"
+
+  service_django_staging:
+    build:
+      context: ../django_service_1
+      dockerfile: docker/Dockerfile
+    container_name: service_django_staging
+    profiles: ["staging"]
+    volumes:
+      - teste_django_db_data:/app/db
+      - static_volume:/app/static
+      - ../django_service_1:/core  # Mount source code for hot reload
+    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    env_file:
+      - ../.env
+    ports:
+      - "8011:8000"
+
+  service_django_production:
+    build:
+      context: ../django_service_1
+      dockerfile: docker/Dockerfile
+    container_name: service_django_production
+    profiles: ["production"]
+    restart: unless-stopped
+    environment:
+      - ENVIRONMENT=prod
+      - PYTHONUNBUFFERED=1
+      - PYTHONIOENCODING=UTF-8
+      - PYTHONDONTWRITEBYTECODE=1
+    volumes:
+      - teste_django_db_data:/app/db
+      - static_volume:/app/static
+    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:8000 --workers 15 --timeout 120 core.wsgi:application"
+    env_file:
+      - ../.env
+    ports:
+      - "8000:8000"
+    # Configurações de logging para containers
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+
+  nginx_dev:
+    image: nginx
+    profiles: ["development"]
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx_config_files/nginx.dev.conf:/etc/nginx/nginx.conf:ro
+      - static_volume:/app/static:ro
+    depends_on:
+      - service_django_dev
+
+  nginx_staging:
+    image: nginx
+    profiles: ["staging"]
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ./nginx_config_files/nginx.staging.conf:/etc/nginx/nginx.conf:ro
+      - static_volume:/app/static:ro
+    depends_on:
+      - service_django_staging
+
+  nginx_production:
+    image: nginx
+    profiles: ["production"]
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ./nginx_config_files/nginx.prod.conf:/etc/nginx/nginx.conf:ro
+      - static_volume:/app/static:ro  
+      
+    depends_on:
+      - service_django_production
+  
+# Volumes garante que os dados do banco de dados sejam mantidos persistentemente
+volumes:
+  # Declaração explícita do volume nomeado
+  teste_django_db_data:
+  static_volume:
+  postgres_data: 

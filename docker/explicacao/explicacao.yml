@@ -1,0 +1,64 @@
+# Especifica a versão da sintaxe do Docker Compose que está sendo usada.
+# A versão do Docker Compose (3.9) impacta:
+# Quais recursos estão disponíveis (mais recentes têm mais funcionalidades)
+# Compatibilidade com diferentes versões do Docker Engine
+# Sintaxe e estrutura aceitas no arquivo
+version: '3.8'
+
+# Esta seção define os containers que compõem sua aplicação. Cada serviço declarado representa um container que será executado como parte do seu ambiente.
+# Importância
+# É a parte central do Docker Compose - sem ela, o arquivo não teria propósito
+# Permite definir múltiplos containers e suas configurações em um único arquivo
+# Estabelece como os diferentes componentes da sua aplicação se relacionam
+# Dentro da seção services: você define cada container com um nome único (no seu caso, "web-django") e depois especifica suas configurações
+services:
+  #  O nome do serviço específico. Este nome será usado para referenciar o container, tanto no Compose quanto na comunicação entre serviços.
+  web-django:
+    # Define instruções para construir uma imagem Docker localmente, em vez de baixar uma imagem pronta de um registro como o Docker Hub.
+    #Toda build precisa ter um dockerfile, seja ele explícito, como é este caso, ou implícito(Encontrado por padrão na pasta do contexto).
+    build:
+      #indica o contexto de build (arquivos disponíveis durante a construção), nesse caso é o diretório pai
+      context: ..
+      #Toda build precisa ter um dockerfile, seja ele explícito, como é este caso, ou implícito(Encontrado por padrão na pasta do contexto).
+      #especifica onde encontrar o Dockerfile dentro desse contexto fornecido
+      #Um Dockerfile é um script com instruções passo a passo que o Docker Engine executa para criar uma imagem personalizada.
+      dockerfile: docker/Dockerfile
+    # Definir valores padrão ou fixos de variaveis de ambiente que não mudam entre ambientes e que nao sao sensiveis ou sigilosos
+    environment:
+      - DOCKERIZED=true
+    #Tem 4 tipos de volumes: #Volumes Nomeados (Named Volumes), Volumes Anônimos (Anonymous Volumes)(Mais usado para tarefas temporárias ou rápidas), Bind Mounts, Volumes tmpfs (Usam a memória RAM para dados temporários, rápidos e voláteis)
+    volumes:
+      # Bind Mounts: Usado para desenvolvimento, mas menos seguro porque dá acesso direto ao sistema de arquivos.
+      # Bind Mounts mapeiam um diretório do host diretamente dentro do container que atualiza o codigo fonte do container em tempo real com base nas alteracoes do codigo fonte do host
+      - ..:/app
+      # Volume persistente nomeado =============================================
+      # Natureza do Volume Nomeado:
+        # É um espaço de armazenamento gerenciado pelo Docker
+        # Independente do ciclo de vida dos containers
+      # Localização Física:
+        # No sistema Linux, geralmente fica em /var/lib/docker/volumes/
+        # Cada volume nomeado tem seu próprio diretório isolado
+        # O Docker cuida completamente da gestão desse espaço
+      # Comportamento ao Remover Container:
+        # Se você apenas parar ou remover o container, o volume PERMANECE intacto
+        # Os dados continuam existindo mesmo após a destruição do container
+        # Pode ser reutilizado por novos containers
+      #Cuidados: 
+        # Se você não deseja que o volume seja excluído acidentalmente ao remover o container, você não deve rodar o comando docker-compose down --volumes ou algo equivalente
+      - django_db_data:/app/db
+    restart: unless-stopped
+    # Carrega variáveis de ambiente de um ou múltiplos arquivos de .env(mas nao precisa ser nomeado como .env). 
+    #Caso tenha alguma variável de ambiente repetida em um desses arquivos, o último arquivo lido tem prioridade e vai sobrescrever o valor dessa variável repetida.
+    #A busca dessas variáveis é feita em relação ao diretório onde o arquivo docker-compose.yml está localizado
+    env_file:
+      - .env
+      - .env-development
+      - ../Teste/.env
+    # mapeia a porta interna para a porta do host
+    ports:
+      - "8001:8000"
+
+# Volumes garante que os dados do banco de dados sejam mantidos persistentemente
+volumes:
+  # Declaração explícita do volume nomeado
+  django_db_data:

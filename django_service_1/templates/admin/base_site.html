@@ -1,0 +1,74 @@
+{% extends "admin/base_site.html" %}
+
+{% block extrahead %}
+  {{ block.super }}
+  <style>
+    /* Create a custom header layout */
+    #header {
+      display: flex !important;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 40px;
+    }
+    
+    /* Style for the home button container */
+    .home-button-container {
+      flex: 1;
+      text-align: center;
+      margin: 0 20px;
+    }
+    
+    /* Style for the home button */
+    .home-button {
+      display: inline-block;
+      background-color: #28a745;
+      color: white;
+      text-decoration: none;
+      padding: 5px 15px;
+      border-radius: 5px;
+      font-size: 14px;
+      width: 150px;
+      text-align: center;
+    }
+    
+    /* Move user tools to right */
+    #user-tools {
+      text-align: right !important;
+      flex: 1;
+    }
+    
+    /* Adjust branding to left */
+    #branding {
+      flex: 1;
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get header element
+      var header = document.getElementById('header');
+      
+      // Create button container
+      var buttonContainer = document.createElement('div');
+      buttonContainer.className = 'home-button-container';
+      
+      // Create home button
+      var homeButton = document.createElement('a');
+      homeButton.href = '/contas/login/';
+      homeButton.target = '_blank';
+      homeButton.className = 'home-button';
+      homeButton.textContent = 'Ir para o Site';
+      
+      // Add button to container
+      buttonContainer.appendChild(homeButton);
+      
+      // Get the user tools element
+      var userTools = document.getElementById('user-tools');
+      
+      // Insert button container before user tools
+      if (userTools) {
+        header.insertBefore(buttonContainer, userTools);
+      }
+    });
+  </script>
+{% endblock %} 

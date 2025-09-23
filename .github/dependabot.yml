@@ -1,0 +1,18 @@
+version: 2
+updates:
+
+  # Habilitar atualizações de versão para o Docker
+  - package-ecosystem: "docker"
+    directory: "/django_service_1/docker"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "docker"
+    directory: "/docker"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "pip"
+    directory: "/django_service_1/requirements"
+    schedule:
+      interval: "daily"
