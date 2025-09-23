@@ -13,4 +13,4 @@ python-dateutil==2.9.0.post0
 python-decouple==3.8
 python-dotenv==1.1.0
 reportlab==4.4.0
-resend==2.10.0
+resend==2.14.0
