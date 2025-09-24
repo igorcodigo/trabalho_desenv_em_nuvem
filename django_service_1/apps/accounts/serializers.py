@@ -9,11 +9,9 @@ from .models import PasswordResetCode
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ('id', 'username', 'email', 'password', 'phone_number', 'full_name', 'first_name', 'last_name', 'date_of_birth')
+        fields = ('id', 'username', 'email', 'password', 'phone_number', 'full_name', 'date_of_birth')
         extra_kwargs = {
             'password': {'write_only': True},
-            'first_name': {'read_only': True},
-            'last_name': {'read_only': True}
         }
 
     def validate_password(self, value):

@@ -33,11 +33,6 @@ class CustomUserModelTests(TestCase):
         self.assertEqual(self.user.phone_number, '123456789')
         self.assertEqual(self.user.date_of_birth, date(1990, 1, 1))
 
-    def test_save_method_splits_full_name(self):
-        """Test that the save method correctly splits full_name into first_name and last_name"""
-        self.assertEqual(self.user.first_name, 'Test')
-        self.assertEqual(self.user.last_name, 'User')
-
     def test_str_representation(self):
         """Test the string representation of the user"""
         self.assertEqual(str(self.user), 'Test User (test@example.com)')

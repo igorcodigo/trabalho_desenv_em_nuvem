@@ -82,7 +82,7 @@ class CreateUserView(generics.CreateAPIView):
             # Enviar email de boas-vindas
             # send_welcome_email(
             #     email=user.email,
-            #     name=user.first_name or "🥳",
+            #     name=user.full_name or "🥳",
             # )
             print("Email de boas-vindas enviado com sucesso")
         except Exception as e:
@@ -170,7 +170,7 @@ class UserViewSet(viewsets.ModelViewSet):
         try:
             # send_welcome_email(
             #     email=user.email,
-            #     name=user.first_name or "🥳",
+            #     name=user.full_name or "🥳",
             # )
             print("Email de boas-vindas enviado com sucesso")
         except Exception as e:

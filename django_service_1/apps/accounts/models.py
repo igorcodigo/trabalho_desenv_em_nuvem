@@ -17,18 +17,11 @@ def validate_username(value):
 class CustomUser(AbstractUser):
     username = models.CharField(unique=True,max_length=150, validators=[validate_username])
     email = models.EmailField(unique=True, blank=True, null=True)
-    phone_number = models.CharField(unique=True, max_length=15, null=True, blank=True)
-    full_name = models.CharField(max_length=40, null=True, blank=False)
-    first_name = models.CharField(max_length=30, blank=True, null=True)
-    last_name = models.CharField(max_length=30, blank=True, null=True)
-    date_of_birth = models.DateField(null=True, blank=True)  
 
-    def save(self, *args, **kwargs):
-        if self.full_name:
-            name_parts = self.full_name.split(' ', 1)
-            self.first_name = name_parts[0]
-            self.last_name = name_parts[1] if len(name_parts) > 1 else ''
-        super().save(*args, **kwargs)
+    #Campos nao obrigatorios
+    full_name = models.CharField(max_length=40, null=True, blank=True)
+    phone_number = models.CharField(unique=True, max_length=15, null=True, blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)  
 
     def __str__(self):
         return f"{self.full_name} ({self.email})"
