@@ -10,6 +10,16 @@ DEBUG = True
 ALLOWED_HOSTS_STR = os.getenv('DJANGO_ALLOWED_HOSTS_DEV', 'localhost,127.0.0.1,::1')
 ALLOWED_HOSTS = ['*']
 
+# CORS Configuration
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:3000",
+    "http://localhost:3000",
+]
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^http://127\.0\.0\.1:30\d{2}$",   # permite 127.0.0.1:3000-3099
+    r"^http://localhost:30\d{2}$",      # permite localhost:3000-3099
+]
+
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 # Database

@@ -8,7 +8,8 @@ from .views import (
     PasswordResetConfirmView, 
     EmailOrUsernameTokenObtainPairView,
     UserViewSet,
-    CustomPasswordResetView
+    CustomPasswordResetView,
+    LogoutView
 )
 from .forms import EmailOrUsernameAuthenticationForm
 
@@ -18,6 +19,7 @@ router.register(r'users', UserViewSet)
 urlpatterns = [
     path('api/token/', EmailOrUsernameTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/logout/', LogoutView.as_view(), name='token_logout'),
     # Autenticação tradicional baseada em sessão do Django com formulário personalizado
     path('login/', auth_views.LoginView.as_view(
         template_name='login.html',
