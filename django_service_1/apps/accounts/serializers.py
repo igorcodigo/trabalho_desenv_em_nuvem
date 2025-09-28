@@ -40,6 +40,12 @@ class CustomUserSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ('id', 'username', 'email', 'phone_number', 'full_name', 'date_of_birth')
+        read_only_fields = ('id', 'email', 'username')  # Esses campos não devem ser alterados aqui
+
 # Serializer para solicitar redefinição de senha
 class PasswordResetRequestSerializer(serializers.Serializer):
     email = serializers.EmailField()

@@ -1,4 +1,4 @@
-from rest_framework import generics, status, viewsets
+from rest_framework import generics, status, viewsets, mixins
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -20,7 +20,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import (
     CustomUserSerializer, 
     PasswordResetRequestSerializer,
-    PasswordResetConfirmSerializer
+    PasswordResetConfirmSerializer,
+    UserUpdateSerializer
 )
 from .models import CustomUser, PasswordResetCode
 
@@ -177,10 +178,17 @@ class UserViewSet(viewsets.ModelViewSet):
         except Exception as e:
             print(f"Erro ao enviar email de boas-vindas: {str(e)}")
 
-    @action(detail=False, methods=['get'])
-    def me(self, request):
-        serializer = self.get_serializer(request.user)
-        return Response(serializer.data)
+
+class UserMeView(generics.RetrieveUpdateAPIView):
+    """
+    API endpoint that allows users to view and edit their own profile.
+    """
+    queryset = CustomUser.objects.all()
+    serializer_class = UserUpdateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
 
 
 class LogoutView(APIView):
