@@ -1,5 +1,5 @@
 from rest_framework import generics, status, viewsets, mixins
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
@@ -157,6 +157,14 @@ class PasswordResetConfirmView(APIView):
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class IsAdminOrSelf(BasePermission):
+    """
+    Permite acesso apenas a usuários administradores ou ao próprio usuário.
+    """
+    def has_object_permission(self, request, view, obj):
+        return request.user.is_staff or obj == request.user
+
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
@@ -165,6 +173,8 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['create']:
             return [AllowAny()]
+        if self.action == 'destroy':
+            return [IsAuthenticated(), IsAdminOrSelf()]
         return super().get_permissions()
 
     def perform_create(self, serializer):
