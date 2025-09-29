@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     # Local Apps
     'apps.accounts',  # App de autenticação e usuários
     'apps.email_service',
+    'apps.todolist',
     
     # Third-party Apps
     'rest_framework',
