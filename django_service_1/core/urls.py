@@ -28,6 +28,7 @@ def hello_world(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('contas/', include('apps.accounts.urls')),
+    path('todolist/', include('apps.todolist.urls')),
     path('hello/', hello_world, name='hello_world'),
 ]
 
