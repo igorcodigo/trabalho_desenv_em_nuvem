@@ -25,6 +25,11 @@ services:
     volumes:
       - ./nginx_config_files/nginx.dev.conf:/etc/nginx/nginx.conf:ro
       - static_volume:/app/static:ro
+      
+      
+      - /etc/letsencrypt/live/facul.subarashii.com.br:/etc/letsencrypt/live/facul.subarashii.com.br:ro
+      - /etc/letsencrypt/archive/facul.subarashii.com.br:/etc/letsencrypt/archive/facul.subarashii.com.br:ro
+      - /etc/letsencrypt/renewal:/etc/letsencrypt/renewal:ro
     depends_on:
       - service_django_dev
   
