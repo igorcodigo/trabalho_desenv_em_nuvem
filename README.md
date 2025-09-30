@@ -51,6 +51,25 @@ Se você não tem Python, pode usar os comandos do Docker Compose diretamente.
         ```
 </details>
 
+
+## Testes Automatizados
+
+Este projeto inclui scripts para testes automatizados de funcionalidades específicas da API.
+
+### Funcionalidade: Teste de Criação de Usuário
+
+O arquivo `teste_automatizado.py` na raiz do projeto contém um teste para a funcionalidade de criação de usuário. Ele envia uma requisição para o endpoint `POST /contas/api/users/` e valida se a resposta está correta, garantindo que o usuário foi criado como esperado.
+
+**Como executar:**
+
+1.  Certifique-se de que o ambiente de desenvolvimento esteja rodando.
+2.  Execute o script de teste com o seguinte comando:
+    ```bash
+    python teste_automatizado.py
+    ```
+
+
+
 ## Documentação da API
 
 ### Autenticação (JWT)

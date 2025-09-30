@@ -17,6 +17,7 @@ from .forms import EmailOrUsernameAuthenticationForm
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
 
+# endpoints derivados de path('contas/', include('apps.accounts.urls'))
 urlpatterns = [
     path('api/token/', EmailOrUsernameTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
