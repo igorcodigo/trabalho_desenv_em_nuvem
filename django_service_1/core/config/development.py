@@ -15,11 +15,15 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:3000",
     "http://172.31.80.1:3000",
+    "https://frontend-trabalho-desenv-em-nuvem.vercel.app",
 ]
 CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^http://127\.0\.0\.1:30\d{2}$",   # permite 127.0.0.1:3000-3099
     r"^http://localhost:30\d{2}$",      # permite localhost:3000-3099
+    r"^https://frontend-trabalho-desenv-em-nuvem.*\.vercel\.app$",
 ]
+
+CORS_ALLOW_CREDENTIALS = True
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
