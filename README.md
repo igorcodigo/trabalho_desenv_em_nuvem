@@ -54,7 +54,18 @@ Se você não tem Python, pode usar os comandos do Docker Compose diretamente.
 
 ## Testes Automatizados
 
-Este projeto inclui scripts para testes automatizados de funcionalidades específicas da API.
+Este projeto inclui o script `teste_automatizado.py` para testar a API da funcionalidade de criação de usuários.
+
+
+## Hospedagem em Nuvem
+
+A aplicação foi hospedada na DigitalOcean, com o IP `134.122.4.163`.
+
+O deploy inicial no servidor foi realizado utilizando Docker para garantir a consistência do ambiente. Para facilitar a configuração e a manutenção, foi desenvolvida uma automação em Python que simplifica a criação do arquivo de variáveis de ambiente e reinicia os containers do Docker de forma automática sempre que o código é atualizado.
+
+Para a exposição segura da aplicação na internet, foi configurado o Nginx como um proxy reverso, juntamente com um domínio próprio (`https://facul.subarashii.com.br/`). A segurança da conexão é garantida por um certificado SSL/TLS obtido através do Let's Encrypt e do Certbot, que possibilitam o uso do protocolo HTTPS.
+
+
 
 ### Funcionalidade: Teste de Criação de Usuário
 
@@ -169,4 +180,3 @@ O CRUD de usuários é gerenciado pelo `UserViewSet`.
 - **Headers**:
   - `Authorization: Bearer <seu_token_de_acesso>`
 - **Acesso**: Requer autenticação.
-
