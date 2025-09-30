@@ -72,13 +72,13 @@ def define_command_docker_compose_linux(docker_compose_file):
 
         if ip_address in STAGING_IPS:
             print("Configurando para ambiente de Staging com base no IP.")
-            command = ["docker", "compose", "-f", docker_compose_file, "--profile", "staging", "up", "--build", "-d"]
+            command = ["docker", "compose", "-f", docker_compose_file, "--profile", "development", "up", "--build", "-d"]
         elif ip_address in PRODUCTION_IPS:
             print("Configurando para ambiente de Produção com base no IP.")
-            command = ["docker", "compose", "-f", docker_compose_file, "--profile", "production", "up", "--build", "-d"]
+            command = ["docker", "compose", "-f", docker_compose_file, "--profile", "development", "up", "--build", "-d"]
         else:
             print("IP não corresponde a Staging nem Produção. Usando perfil padrão (staging).")
-            command = ["docker", "compose", "-f", docker_compose_file, "--profile", "staging", "up", "--build", "-d"]
+            command = ["docker", "compose", "-f", docker_compose_file, "--profile", "development", "up", "--build", "-d"]
     else:
         print("Não foi possível obter o IP. Usando perfil padrão (staging).")
         command = ["docker", "compose", "-f", docker_compose_file, "--profile", "staging", "up", "--build", "-d"]
